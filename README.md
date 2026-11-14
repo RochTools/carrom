@@ -28,5 +28,7 @@ Pick one of the four picture buttons on the menu (images live in `menu/`):
 ## Sounds
 Optional mp3 files go in `sounds/` (see `sounds/README.txt`). Without them the game uses built-in synth sounds.
 
+## game live here 👇🏿 
+https://rochtools.github.io/carrom/
 ## Files
 `index.html`, `styles.css`, `game.js`, `board/carrom-board.svg`, `manifest.webmanifest`, `sw.js`, `icons/`. Bump `VERSION` in `sw.js` when you change files so installed copies update.
