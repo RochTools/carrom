@@ -42,20 +42,20 @@
 
     <!-- One complete shooting baseline; the other three are rotations of this one. -->
     <g id="baseline">
-      <path d="M205 157H595V185H205Z" fill="#aa4b37" fill-opacity=".028"/>
-      <path d="M205 157H595 M205 185H595" fill="none" stroke="#a54737" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M205 146H595V196H205Z" fill="#aa4b37" fill-opacity=".028"/>
+      <path d="M205 146H595 M205 196H595" fill="none" stroke="#a54737" stroke-width="2.8" stroke-linecap="round"/>
       <path d="M225 171H575" fill="none" stroke="#a54737" stroke-opacity=".14" stroke-width="1"/>
       <g fill="#f8e3ba" stroke="#a54737" stroke-width="2.6">
-        <circle cx="205" cy="171" r="17.5"/>
-        <circle cx="595" cy="171" r="17.5"/>
+        <circle cx="205" cy="171" r="23.5"/>
+        <circle cx="595" cy="171" r="23.5"/>
       </g>
       <g fill="none" stroke="#a54737" stroke-opacity=".48" stroke-width="1.2">
-        <circle cx="205" cy="171" r="11.5"/>
-        <circle cx="595" cy="171" r="11.5"/>
+        <circle cx="205" cy="171" r="15.5"/>
+        <circle cx="595" cy="171" r="15.5"/>
       </g>
       <g fill="#a54737">
-        <circle cx="205" cy="171" r="4"/>
-        <circle cx="595" cy="171" r="4"/>
+        <circle cx="205" cy="171" r="5.2"/>
+        <circle cx="595" cy="171" r="5.2"/>
       </g>
     </g>
 
