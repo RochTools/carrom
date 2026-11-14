@@ -9,8 +9,8 @@
   const BOARD = 800, CX = 400, CY = 400;
   const WALL_MIN = 58, WALL_MAX = 742;                 // cushion: coin edges bounce here
   const POCKETS = [{ x: 88, y: 88 }, { x: 712, y: 88 }, { x: 712, y: 712 }, { x: 88, y: 712 }];
-  const POCKET_R = 26;                                  // a body whose centre gets this close to a pocket centre drops in
-  const COIN_R = 16.5, STRIKER_R = 20.5;
+  const POCKET_R = 28;                                  // a body whose centre gets this close to a pocket centre drops in
+  const COIN_R = 19, STRIKER_R = 23.5;
   const COIN_M = 1, STRIKER_M = 2.6;
   const BASE_LINE = [629, 629, 171, 171];                // baseline position for each side: 0 bottom, 1 right, 2 top, 3 left
   const INWARD = [[0, -1], [-1, 0], [0, 1], [1, 0]];    // direction pointing from a side's baseline into the board
@@ -506,15 +506,53 @@
     beginTurn();
   }
 
+  // A team wins once all 9 of its coins are in AND the queen has been pocketed and covered (by either team).
+  // If the queen isn't covered yet, that last coin goes back to the centre.
   function checkWin(me, msgs) {
-    const mk = kindOf(me), ok = kindOf(1 - me);
-    if (game.pocketed[mk].length >= 9) {
-      if (game.queen.state === 'covered' && game.queen.owner === me) return me;
-      const last = game.pocketed[mk][game.pocketed[mk].length - 1]; returnToCenter(last);
-      msgs.push('Cover the queen first — last coin goes back');
+    for (const t of [me, 1 - me]) {
+      const k = kindOf(t), list = game.pocketed[k];
+      if (list.length < 9) continue;
+      if (game.queen.state === 'covered') return t;
+      returnToCenter(list[list.length - 1]);
+      msgs.push('Queen must be pocketed and covered first — last coin goes back');
     }
-    if (game.pocketed[ok].length >= 9 && game.queen.state === 'covered' && game.queen.owner === 1 - me) return 1 - me;
     return null;
+  }
+
+  /* Paper confetti when the game ends */
+  const confetti = { cv: null, ctx: null, parts: [], raf: 0, t0: 0 };
+  function startConfetti() {
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!confetti.cv) {
+      const cv = document.createElement('canvas'); cv.setAttribute('aria-hidden', 'true');
+      cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:30;pointer-events:none';
+      document.body.appendChild(cv); confetti.cv = cv; confetti.ctx = cv.getContext('2d');
+    }
+    const cv = confetti.cv, d = Math.min(window.devicePixelRatio || 1, 2), W = innerWidth, H = innerHeight;
+    cv.width = Math.round(W * d); cv.height = Math.round(H * d);
+    const colors = ['#ffd83a', '#ff4d4d', '#3ddc84', '#4da3ff', '#ff8a2b', '#ffffff', '#c06bff'];
+    const rnd = (a, b) => a + Math.random() * (b - a), mk = (x, y, vx, vy) => ({ x, y, vx, vy, w: rnd(7, 13), h: rnd(10, 18), rot: rnd(0, 6.28), vr: rnd(-8, 8), ph: rnd(0, 6.28), c: colors[(Math.random() * colors.length) | 0], life: rnd(3.2, 5) });
+    confetti.parts = [];
+    for (let i = 0; i < 70; i++) {                                    // two bursts from the bottom corners
+      const left = i % 2 === 0, sp = rnd(520, 980) * Math.max(0.7, H / 800);
+      confetti.parts.push(mk(left ? 0 : W, H, (left ? 1 : -1) * rnd(140, 460), -sp));
+    }
+    for (let i = 0; i < 90; i++) confetti.parts.push(mk(rnd(0, W), rnd(-H * 0.6, -10), rnd(-40, 40), rnd(40, 160)));   // paper falling from above
+    confetti.t0 = performance.now(); let last = confetti.t0;
+    cancelAnimationFrame(confetti.raf);
+    const step = (now) => {
+      const dt = Math.min(0.04, (now - last) / 1000); last = now;
+      const g = confetti.ctx; g.setTransform(d, 0, 0, d, 0, 0); g.clearRect(0, 0, W, H);
+      confetti.parts = confetti.parts.filter((p) => p.y < H + 30 && p.life > 0 && !ui.end.hidden);
+      for (const p of confetti.parts) {
+        p.vy += 620 * dt; p.vx *= 1 - 1.4 * dt; p.vy *= 1 - 0.9 * dt;       // gravity + air drag, so paper drifts down
+        p.x += (p.vx + Math.sin(p.ph) * 40) * dt; p.y += p.vy * dt; p.rot += p.vr * dt; p.ph += 4 * dt; p.life -= dt;
+        g.save(); g.translate(p.x, p.y); g.rotate(p.rot); g.globalAlpha = Math.min(1, p.life * 1.5);
+        g.fillStyle = p.c; g.fillRect(-p.w / 2, -p.h / 2 * Math.abs(Math.cos(p.ph)), p.w, p.h * Math.abs(Math.cos(p.ph)) + 1); g.restore();
+      }
+      if (confetti.parts.length) confetti.raf = requestAnimationFrame(step); else g.clearRect(0, 0, W, H);
+    };
+    confetti.raf = requestAnimationFrame(step);
   }
 
   function endGame(w) {
@@ -524,7 +562,7 @@
       : game.mode === 'four' ? `Team ${teamName(w)} wins!` : `${teamName(w)} wins!`;
     ui.endReason.textContent = `All 9 ${w === 0 ? 'white' : 'black'} coins pocketed and the queen covered${seatCount() === 4 ? ' by the team' : ''}.`;
     ui.chips[w].classList.add('winner');
-    setTimeout(() => { ui.end.hidden = false; }, 700);
+    setTimeout(() => { if (game.state === 'over') { ui.end.hidden = false; startConfetti(); } }, 700);
   }
 
   /* ------------------------------------------------------------------ */
