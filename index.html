@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0a2d96">
+  <meta name="description" content="Carrom — two players, four players, teams against AI, or versus the computer. Installable, works offline.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Carrom">
+  <title>Carrom</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/favicon-32.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="board" class="board-canvas" aria-label="Carrom board. Slide the striker along the line, then drag back from anywhere on the board and let go to shoot." role="img"></canvas>
+
+  <div class="hud" id="hud">
+    <div class="chip" id="player-1"><span class="chip-dot"></span><span class="coin-ico white"></span><span class="chip-name" id="player-1-name">P1</span><b class="chip-count" id="player-1-count">0</b></div>
+    <div class="chip queen-chip" id="queen-chip" title="Queen"><span class="coin-ico queen"></span><span id="queen-state">–</span></div>
+    <div class="chip" id="player-2"><span class="chip-dot"></span><span class="coin-ico black"></span><span class="chip-name" id="player-2-name">P2</span><b class="chip-count" id="player-2-count">0</b></div>
+  </div>
+
+  <button class="menu-button" id="menu-button" type="button" aria-label="Menu" title="Menu">
+    <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 6h12M4 10h12M4 14h12"/></svg>
+  </button>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Slide the knob to move the striker along your line -->
+  <div class="slider disabled" id="slider" aria-label="Move striker">
+    <div class="slider-track"></div>
+    <div class="slider-knob" id="slider-knob"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m7 6-4 4 4 4M13 6l4 4-4 4"/></svg></div>
+  </div>
+
+  <div class="overlay" id="start-overlay">
+    <div class="panel">
+      <h1>Carrom</h1>
+      <div class="mode-grid">
+        <button class="mode-card" type="button" data-mode="pvp" aria-label="Two player: pass and play on one device"><img src="menu/two-player.webp" alt="Two player" width="512" height="512" draggable="false"></button>
+        <button class="mode-card" type="button" data-mode="vs2ai" aria-label="2 players versus 2 AI: two partners against two computer partners"><img src="menu/two-vs-two-ai.webp" alt="2 players versus 2 AI" width="512" height="512" draggable="false"></button>
+        <button class="mode-card" type="button" data-mode="four" aria-label="Four player: two teams of two, partners sit opposite"><img src="menu/four-player.webp" alt="Four player" width="512" height="512" draggable="false"></button>
+        <button class="mode-card" type="button" data-mode="cpu" aria-label="Versus computer"><img src="menu/versus-computer.webp" alt="Versus computer" width="512" height="512" draggable="false"></button>
+      </div>
+      <div class="panel-links">
+        <button class="link-button" type="button" id="resume-button" hidden>Resume game</button>
+        <button class="link-button" type="button" id="sound-button" aria-pressed="true">Sound: On</button>
+        <button class="link-button" type="button" id="install-button" hidden>Install app</button>
+        <button class="link-button" type="button" id="start-help">How to play</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="end-overlay" hidden>
+    <div class="panel">
+      <span class="panel-kicker">GAME OVER</span>
+      <h2 id="end-title">Player 1 wins</h2>
+      <p class="panel-lead" id="end-reason"></p>
+      <div class="mode-buttons">
+        <button class="mode-button primary" type="button" id="rematch-button"><span class="mode-title">Rematch</span></button>
+        <button class="mode-button" type="button" id="change-mode-button"><span class="mode-title">Change mode</span></button>
+      </div>
+    </div>
+  </div>
+
+  <dialog class="help-dialog" id="help-dialog" aria-labelledby="help-title">
+    <div class="dialog-header">
+      <h2 id="help-title">How to play Carrom</h2>
+      <button class="icon-button" id="help-close" type="button" aria-label="Close"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="m5 5 10 10M15 5 5 15"/></svg></button>
+    </div>
+    <div class="help-body">
+      <h3>The idea</h3>
+      <ul>
+        <li>Each player has 9 coins: Player 1 is <strong>White</strong> (shoots from the bottom line), Player 2 is <strong>Black</strong> (shoots from the top line). The red coin in the middle is the <strong>Queen</strong>.</li>
+        <li>You use one big disc, the <strong>striker</strong>, to hit your coins into the four corner pockets. First to pocket all 9 of their own coins <em>and</em> the queen wins.</li>
+      </ul>
+      <h3>Controls</h3>
+      <ul>
+        <li><strong>Place the striker</strong> — slide the knob under the board. The striker moves along your line between the two end circles.</li>
+        <li><strong>Shoot</strong> — touch the board anywhere and drag <em>backwards</em>, like a slingshot. The dotted line shows where it will go; the longer you drag, the harder the shot. Let go to shoot, or drag back to the start to cancel.</li>
+      </ul>
+      <h3>Team modes (4 seats)</h3>
+      <ul>
+        <li><strong>Four player</strong> and <strong>2 players vs 2 AI</strong> use all four sides of the board. Partners sit <em>opposite</em> each other: the bottom and top seats are the <strong>White</strong> team, the right and left seats are the <strong>Black</strong> team.</li>
+        <li>Turns go clockwise: bottom → right → top → left. Pocketing a coin of your team's colour gives that seat another shot; coins count for the whole team.</li>
+        <li>In <strong>2 players vs 2 AI</strong> the two people (bottom and top) are partners against the two computer players (right and left). The seat that is shooting is labelled next to its line.</li>
+        <li>The team wins when all 9 of its coins are in and its queen is covered.</li>
+      </ul>
+      <h3>Rules</h3>
+      <ul>
+        <li>Pocket one of <strong>your own</strong> coins and you shoot again. If you miss, the turn passes.</li>
+        <li>A coin of the other colour that you pocket stays pocketed, but it counts for your opponent, and your turn ends.</li>
+        <li><strong>Queen</strong> — after you pocket the queen you must <em>cover</em> it by pocketing one of your own coins in the same turn or on your very next shot. If you don't, the queen goes back to the centre.</li>
+        <li><strong>Foul</strong> — if the striker falls in a pocket, your turn ends and one of your pocketed coins goes back to the centre (if you have none yet, the next coin you pocket goes back instead).</li>
+        <li>You can't finish without the queen: if your last coin goes in before you have covered the queen, that coin goes back to the centre.</li>
+      </ul>
+    </div>
+  </dialog>
+  <script src="game.js"></script>
+</body>
+</html>
