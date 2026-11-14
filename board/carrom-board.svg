@@ -1,0 +1,158 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-labelledby="board-title board-description">
+  <title id="board-title">کیرم بورڈ</title>
+  <desc id="board-description">لکڑی کے فریم، چار پاکٹس، کناروں کی لائنوں اور مرکزی دائرے والا خالی کیرم بورڈ۔</desc>
+
+  <defs>
+    <linearGradient id="outer-wood" x1="0" y1="0" x2="1" y2="1" objectBoundingBox="true">
+      <stop offset="0" stop-color="#a56939"/>
+      <stop offset=".22" stop-color="#754124"/>
+      <stop offset=".53" stop-color="#4b281d"/>
+      <stop offset=".79" stop-color="#774528"/>
+      <stop offset="1" stop-color="#392017"/>
+    </linearGradient>
+    <linearGradient id="wood-shadow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#402319"/>
+      <stop offset=".48" stop-color="#70422a"/>
+      <stop offset="1" stop-color="#381e16"/>
+    </linearGradient>
+    <linearGradient id="wood-rim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#b97e45"/>
+      <stop offset=".48" stop-color="#794525"/>
+      <stop offset="1" stop-color="#9b6136"/>
+    </linearGradient>
+    <linearGradient id="wood-inner" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#603720"/>
+      <stop offset=".5" stop-color="#a16a3a"/>
+      <stop offset="1" stop-color="#57301e"/>
+    </linearGradient>
+    <radialGradient id="playing-surface" cx="36%" cy="31%" r="83%">
+      <stop offset="0" stop-color="#fff0cd"/>
+      <stop offset=".45" stop-color="#f5e2b9"/>
+      <stop offset=".82" stop-color="#ebd0a1"/>
+      <stop offset="1" stop-color="#dfbd88"/>
+    </radialGradient>
+    <radialGradient id="pocket-depth" cx="35%" cy="27%" r="78%">
+      <stop offset="0" stop-color="#20201c"/>
+      <stop offset=".5" stop-color="#0c0e0d"/>
+      <stop offset="1" stop-color="#050707"/>
+    </radialGradient>
+    <clipPath id="surface-clip">
+      <rect x="56" y="56" width="688" height="688" rx="9"/>
+    </clipPath>
+
+    <!-- One complete shooting baseline; the other three are rotations of this one. -->
+    <g id="baseline">
+      <path d="M205 157H595V185H205Z" fill="#aa4b37" fill-opacity=".028"/>
+      <path d="M205 157H595 M205 185H595" fill="none" stroke="#a54737" stroke-width="2.8" stroke-linecap="round"/>
+      <path d="M225 171H575" fill="none" stroke="#a54737" stroke-opacity=".14" stroke-width="1"/>
+      <g fill="#f8e3ba" stroke="#a54737" stroke-width="2.6">
+        <circle cx="205" cy="171" r="17.5"/>
+        <circle cx="595" cy="171" r="17.5"/>
+      </g>
+      <g fill="none" stroke="#a54737" stroke-opacity=".48" stroke-width="1.2">
+        <circle cx="205" cy="171" r="11.5"/>
+        <circle cx="595" cy="171" r="11.5"/>
+      </g>
+      <g fill="#a54737">
+        <circle cx="205" cy="171" r="4"/>
+        <circle cx="595" cy="171" r="4"/>
+      </g>
+    </g>
+
+    <!-- Arrow points from the middle towards a corner pocket. -->
+    <g id="corner-arrow" fill="none" stroke="#a54737" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M269 269 154 154" stroke-width="2.4"/>
+      <path d="M147 147 182 158 158 182Z" fill="#a54737" stroke="none"/>
+      <path d="M226 226 240 207 M226 226 207 240 M251 251 262 235 M251 251 235 262" stroke-width="1.7" stroke-opacity=".7"/>
+      <circle cx="270" cy="270" r="3.3" fill="#a54737" stroke="none"/>
+    </g>
+
+    <g id="pocket">
+      <circle r="39" fill="#6e4026" stroke="#eac18a" stroke-width="2.4"/>
+      <circle r="34.5" fill="#2e1a14" stroke="#9d653b" stroke-width="2"/>
+      <circle r="29" fill="url(#pocket-depth)" stroke="#100e0d" stroke-width="3"/>
+      <path d="M-19-19A27 27 0 0 1 18-20" fill="none" stroke="#d7a474" stroke-opacity=".33" stroke-width="2.2" stroke-linecap="round"/>
+      <path d="M-19 18A27 27 0 0 0 19 18" fill="none" stroke="#000" stroke-opacity=".48" stroke-width="2"/>
+    </g>
+
+    <g id="center-petal">
+      <path d="M400 382 C391 373 391 356 400 345 C409 356 409 373 400 382Z" fill="#a54737" fill-opacity=".10" stroke="#a54737" stroke-opacity=".57" stroke-width="1.4"/>
+    </g>
+    <g id="frame-mark">
+      <path d="M369 32h19 M412 32h19" fill="none" stroke="#f2c991" stroke-opacity=".56" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="m400 26 6 6-6 6-6-6Z" fill="#e7b374" fill-opacity=".85"/>
+    </g>
+  </defs>
+
+  <!-- Layered, beveled wooden frame. -->
+  <rect x="8" y="8" width="784" height="784" rx="36" fill="#291711"/>
+  <rect x="14" y="14" width="772" height="772" rx="31" fill="url(#outer-wood)" stroke="#bd8250" stroke-width="2"/>
+  <rect x="23" y="23" width="754" height="754" rx="25" fill="url(#wood-shadow)" stroke="#3d2319" stroke-width="2.5"/>
+  <g fill="none" stroke="#e3ad70" stroke-opacity=".18" stroke-width="1.1" stroke-linecap="round">
+    <path d="M43 20C186 17 254 22 397 19S631 23 757 20 M45 27C194 30 260 25 390 28S625 25 755 28 M43 39C210 35 293 42 393 39S609 36 755 39"/>
+    <path d="M42 760C213 756 263 762 401 759S635 763 758 760 M45 772C204 768 297 774 402 771S627 769 753 772"/>
+    <path d="M20 43C18 202 23 268 20 400S22 634 20 758 M28 45C31 189 25 278 28 395S24 625 28 753 M39 44C36 201 42 285 39 397S35 618 39 757"/>
+    <path d="M760 43C758 193 762 286 760 401S764 614 760 758 M772 45C769 210 774 278 771 403S769 631 772 754"/>
+  </g>
+  <rect x="31" y="31" width="738" height="738" rx="22" fill="url(#wood-rim)" stroke="#d9a66d" stroke-width="2"/>
+  <rect x="40" y="40" width="720" height="720" rx="17" fill="url(#wood-inner)" stroke="#49291c" stroke-width="3"/>
+  <rect x="48" y="48" width="704" height="704" rx="12" fill="#c08c55" stroke="#efc994" stroke-width="1.6"/>
+
+  <!-- Empty, polished playing field. -->
+  <rect x="56" y="56" width="688" height="688" rx="9" fill="url(#playing-surface)" stroke="#805133" stroke-width="3.5"/>
+  <g clip-path="url(#surface-clip)" fill="none" stroke="#9b704a" stroke-opacity=".075" stroke-width="1.1">
+    <path d="M61 109C195 100 287 116 416 107S624 111 750 102 M51 233C177 221 342 239 493 229S667 232 758 225"/>
+    <path d="M48 346C169 355 284 337 418 348S647 340 755 350 M48 471C178 464 285 477 440 465S647 479 750 469"/>
+    <path d="M51 583C201 573 301 590 441 578S643 590 753 577 M51 695C197 686 311 705 452 692S637 701 750 687"/>
+  </g>
+  <rect x="63" y="63" width="674" height="674" rx="4" fill="none" stroke="#fff6dc" stroke-opacity=".44" stroke-width="1.7"/>
+
+  <!-- Traditional red shooting lines and eight end circles. -->
+  <g id="board-lines">
+    <use href="#baseline"/>
+    <use href="#baseline" transform="rotate(90 400 400)"/>
+    <use href="#baseline" transform="rotate(180 400 400)"/>
+    <use href="#baseline" transform="rotate(270 400 400)"/>
+  </g>
+
+  <!-- Directional corner arrows. -->
+  <g id="board-arrows">
+    <use href="#corner-arrow"/>
+    <use href="#corner-arrow" transform="rotate(90 400 400)"/>
+    <use href="#corner-arrow" transform="rotate(180 400 400)"/>
+    <use href="#corner-arrow" transform="rotate(270 400 400)"/>
+  </g>
+
+  <!-- Center circle, left unobstructed for adding coins later. -->
+  <g id="board-center">
+    <circle cx="400" cy="400" r="74" fill="#a54737" fill-opacity=".025" stroke="#a54737" stroke-width="2.8"/>
+    <circle cx="400" cy="400" r="65" fill="none" stroke="#a54737" stroke-opacity=".65" stroke-width="1.2"/>
+    <use href="#center-petal"/>
+    <use href="#center-petal" transform="rotate(45 400 400)"/>
+    <use href="#center-petal" transform="rotate(90 400 400)"/>
+    <use href="#center-petal" transform="rotate(135 400 400)"/>
+    <use href="#center-petal" transform="rotate(180 400 400)"/>
+    <use href="#center-petal" transform="rotate(225 400 400)"/>
+    <use href="#center-petal" transform="rotate(270 400 400)"/>
+    <use href="#center-petal" transform="rotate(315 400 400)"/>
+    <circle cx="400" cy="400" r="19" fill="#f5deb1" stroke="#a54737" stroke-width="2"/>
+    <circle cx="400" cy="400" r="12.5" fill="none" stroke="#a54737" stroke-opacity=".63" stroke-width="1"/>
+    <circle cx="400" cy="400" r="4.2" fill="#a54737"/>
+  </g>
+
+  <!-- Four recessed corner pockets. -->
+  <g id="board-pockets">
+    <use href="#pocket" transform="translate(88 88) scale(.78)"/>
+    <use href="#pocket" transform="translate(712 88) scale(.78)"/>
+    <use href="#pocket" transform="translate(712 712) scale(.78)"/>
+    <use href="#pocket" transform="translate(88 712) scale(.78)"/>
+  </g>
+
+  <!-- Tiny inlaid marks on the wooden rails. -->
+  <g id="rail-details">
+    <use href="#frame-mark"/>
+    <use href="#frame-mark" transform="rotate(90 400 400)"/>
+    <use href="#frame-mark" transform="rotate(180 400 400)"/>
+    <use href="#frame-mark" transform="rotate(270 400 400)"/>
+  </g>
+</svg>
