@@ -1,8 +1,9 @@
 /* Carrom service worker — app-shell cache, offline first. */
-const VERSION = 'carrom-v7';
+const VERSION = 'carrom-v10';
 const SHELL = [
   './', './index.html', './styles.css', './game.js', './manifest.webmanifest', './board/carrom-board.svg',
   './icons/icon-192.png', './icons/icon-512.png', './icons/maskable-192.png', './icons/maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-32.png',
+  './pieces/striker.webp', './pieces/queen.webp', './pieces/white.webp', './pieces/black.webp',
   './menu/two-player.webp', './menu/two-vs-two-ai.webp', './menu/four-player.webp', './menu/versus-computer.webp'
 ];
 self.addEventListener('install', (e) => { e.waitUntil(caches.open(VERSION).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting())); });

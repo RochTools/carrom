@@ -23,8 +23,8 @@
     four:  { sides: [0, 1, 2, 3], cpu: [false, false, false, false] }  // four people, partners opposite
   };
   const BASE_X0 = 205, BASE_X1 = 595;
-  const DRAG_K = 1.15;                                  // velocity decay per second (powdery board: things glide)
-  const STOP_V = 7;
+  const DRAG_K = 2.4;                                   // velocity decay per second (powdery board: things glide)
+  const STOP_V = 12;
   const MAX_V = 2300;                                   // striker speed at 100 % power
   const E_COIN = 0.93, E_WALL = 0.78;
   const PULL_MAX = 240, PULL_MIN = 22;                  // board units of drag for full power / cancel threshold
@@ -263,7 +263,22 @@
     sprites.w = coinSprite('w', COIN_R, k); sprites.b = coinSprite('b', COIN_R, k);
     sprites.q = coinSprite('q', COIN_R, k); sprites.s = coinSprite('s', STRIKER_R, k);
   }
+  // Photo-style PNG/WebP pieces (pieces/*.webp). The drawn sprites below are the fallback while they load.
+  const pieceImgs = {};
+  ['striker:s', 'queen:q', 'white:w', 'black:b'].forEach((e) => {
+    const [file, kind] = e.split(':'), im = new Image();
+    im.onload = () => { if (view.sc) { buildSprites(); invalidate(); } };
+    im.src = `pieces/${file}.webp`; pieceImgs[kind] = im;
+  });
+  function pieceSprite(kind, r, k) {
+    const im = pieceImgs[kind]; if (!im || !im.complete || !im.naturalWidth) return null;
+    const R = r * k, D = Math.ceil(R * 2 * 1.25), cv = document.createElement('canvas'); cv.width = D; cv.height = D;
+    const g = cv.getContext('2d'), w = R * 2 * 1.08;
+    g.imageSmoothingQuality = 'high'; g.drawImage(im, D / 2 - w / 2, D / 2 - w / 2 - w * 0.025, w, w);
+    cv.half = D / 2; return cv;
+  }
   function coinSprite(kind, r, k) {
+    const photo = pieceSprite(kind, r, k); if (photo) return photo;
     const pad = 7, R = r * k, D = Math.ceil((R + pad) * 2), cv = document.createElement('canvas');
     cv.width = D; cv.height = D;
     const g = cv.getContext('2d'), c = D / 2, TAU = Math.PI * 2;
