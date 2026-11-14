@@ -145,7 +145,24 @@
     return `P${t + 1}`;
   };
   const isCpuTurn = () => !!game.cpu[game.current];
-  const placeStriker = (seat, u) => { game.strikerX[seat] = u; const [x, y] = baseXY(game.sides[seat], u); game.striker.x = x; game.striker.y = y; };
+  // If a coin already sits on the baseline, the striker hops to the free spot beside it (left or right, whichever is nearer)
+  function freeU(seat, u) {
+    const side = game.sides[seat], vertical = side % 2 === 1, minD = STRIKER_R + COIN_R + 0.5, blockers = [];
+    for (const o of game.bodies) {
+      if (!o.in || o === game.striker) continue;
+      const h = Math.abs((vertical ? o.x : o.y) - BASE_LINE[side]);
+      if (h < minD) blockers.push({ cu: vertical ? o.y : o.x, w: Math.sqrt(minD * minD - h * h) });
+    }
+    const ok = (v) => v >= BASE_X0 && v <= BASE_X1 && blockers.every((b) => Math.abs(v - b.cu) >= b.w - 0.01);
+    if (ok(u)) return u;
+    let best = null;
+    for (const b of blockers) for (const v of [b.cu - b.w, b.cu + b.w]) {
+      const vv = Math.max(BASE_X0, Math.min(BASE_X1, v));
+      if (ok(vv) && (best === null || Math.abs(vv - u) < Math.abs(best - u))) best = vv;
+    }
+    return best === null ? u : best;
+  }
+  const placeStriker = (seat, u) => { u = freeU(seat, u); game.strikerX[seat] = u; const [x, y] = baseXY(game.sides[seat], u); game.striker.x = x; game.striker.y = y; };
 
   function makeBody(kind, x, y) {
     const striker = kind === 's';
